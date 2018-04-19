@@ -1,0 +1,91 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+.banner-header {
+  width: 100%;
+  height: auto;
+  max-height: 150px;
+  max-heigth: 100px !important;
+}
+
+.vote-container {
+  position: relative;
+  float: left;
+  width: 10%;
+}
+
+.vertical-vote {
+  display: block;
+  height: 50%;
+  width: 50%;
+  margin: 1px;
+}
+
+.wrapper {
+  width: 100%;
+  margin: auto;
+  overflow: hidden;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.info-container {
+  text-align: left;
+}
+
+.comment-button {
+  background: transparent;
+  border: none;
+}
+
+.drop-down-menu {
+  margin-right: 10px;
+}
+
+.comment-button:hover {
+  color: blue;
+}
+
+ul {
+  list-style: none;
+}
+
+.drop-down-menu {
+  float: left;
+}
+
+.info-container>h4:hover {
+  color: blue;
+  cursor: pointer;
+}
+
+.info-container>button {
+  padding-left: 0px;
+  padding-right: 2px;
+}
+
+.modesty-spacing {
+  margin-right: 10px;
+}
+
