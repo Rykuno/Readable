@@ -6,11 +6,18 @@ import { deletePost } from '../actions/infoActions';
 
 class DeleteModal extends Component {
   removePost = () => {
-    const { removePost, id } = this.props;
+    const { removePost, id, close, returnToPage } = this.props;
     removePost(id);
+
+    if (returnToPage) {
+      close();
+      returnToPage();
+    }
+
+    close();
   };
 
-  render() {
+  render() {    
     const { close, id } = this.props;
     console.log('ID: ', id);
 

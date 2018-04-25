@@ -6,14 +6,31 @@ import { MenuItem, DropdownButton, Button } from 'react-bootstrap';
 import Header from '../components/Header';
 import NavBar from '../components/NavBar';
 import PostList from './PostList';
+import CreatePostModal from '../components/CreatePostModal';
 
 class Home extends Component {
+  state = {
+    showCreate: false
+  };
+
   componentDidMount() {
     this.fetchCategories();
     if (this.props.match.params.category) {
       this.props.setCategory(this.props.match.params.category);
     }
   }
+
+  showCreateModal = () => {
+    this.setState({
+      showCreate: true
+    });
+  };
+
+  closeCreateModal = () => {
+    this.setState({
+      showCreate: false
+    });
+  };
 
   onSubmit = e => {
     const { sortPostsBy } = this.props;
@@ -47,10 +64,17 @@ class Home extends Component {
               Votes
             </MenuItem>
           </DropdownButton>
-          <Button bsStyle="primary">Create Post</Button>
+          <Button bsStyle="primary" onClick={this.showCreateModal}>Create Post</Button>
           <hr />
           <PostList />
         </div>
+
+        {this.state.showCreate === false || (
+          <CreatePostModal
+            show
+            close={this.closeCreateModal}
+          />
+        )}
       </div>
     );
   }

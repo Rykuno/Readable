@@ -86,3 +86,20 @@ export const deletePost = id =>
       'Content-Type': 'application/json'
     }
   }).then(res => res.json());
+
+export const createPost = (title, body, author, category) =>
+  fetch(`${api}/posts`, {
+    method: 'POST',
+    headers: {
+      ...headers,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      id: new Date().valueOf(),
+      timestamp: Date.now(),
+      title,
+      body,
+      author,
+      category
+    })
+  }).then(res => res.json());

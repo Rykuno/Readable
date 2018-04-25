@@ -5,7 +5,8 @@ import {
   VOTE_POST,
   SET_CATEGORY,
   MODIFY_POST,
-  DELETE_POST
+  DELETE_POST,
+  CREATE_POST
 } from '../actions/infoActions';
 
 const sortPostsBy = (sortBy, posts) => {
@@ -78,10 +79,15 @@ const infoReducer = (state = initialState, action) => {
         })
       };
     case DELETE_POST:
-      console.log('Deleteing Post');
       return {
         ...state,
         posts: state.posts.slice().filter(obj => obj.id !== action.payload)
+      };
+
+    case CREATE_POST:
+      return {
+        ...state,
+        posts: [...state.posts, action.payload]
       };
     default:
       return state;

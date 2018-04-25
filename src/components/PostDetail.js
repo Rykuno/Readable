@@ -13,10 +13,13 @@ import * as ReadableAPI from '../utils/readableAPI';
 import EditModal from '../components/EditModal';
 import editIcon from '../images/edit.png';
 import NoMatch from './NoMatch';
+import DeleteModal from './DeleteModal';
+import deleteIcon from '../images/delete.png';
 
 class PostDetail extends Component {
   state = {
-    show: false
+    showEdit: false,
+    showDelete: false
   };
 
   componentDidMount() {
@@ -124,13 +127,25 @@ class PostDetail extends Component {
 
   showEditModal = () => {
     this.setState({
-      show: true
+      showEdit: true
     });
   };
 
   closeEditModal = () => {
     this.setState({
-      show: false
+      showEdit: false
+    });
+  };
+
+  showDeleteModal = () => {
+    this.setState({
+      showDelete: true
+    });
+  };
+
+  closeDeleteModal = () => {
+    this.setState({
+      showDelete: false
     });
   };
 
@@ -141,89 +156,106 @@ class PostDetail extends Component {
     });
   };
 
+  returnToPage = () => {
+    this.props.history.goBack();
+  };
+
   render() {
+    console.log('HISTORY: ', this.props.history);
+
     const {
       title, id, body, author, category, voteScore, commentCount
     } = this.state;
-    if (this.props.posts.length !== 0) {
-      return (
-        <div>
-          <Header />
-          <NavBar />
-          <div className="post-detail">
-            <div className="vote-container">
-              <input
-                type="image"
-                onMouseOver={e => (e.currentTarget.src = upvoteArrowDark)}
-                onMouseOut={e => (e.currentTarget.src = upvoteArrow)}
-                onClick={() => this.votePost('upVote')}
-                className="vertical-vote arrow"
-                src={upvoteArrow}
-                alt="upVote"
-              />
-              <h4 className="vertical-vote">{voteScore}</h4>
-              <input
-                type="image"
-                onMouseOver={e => (e.currentTarget.src = downvoteArrowDark)}
-                onMouseOut={e => (e.currentTarget.src = downvoteArrow)}
-                className="vertical-vote"
-                src={downvoteArrow}
-                alt="downVote"
-                onClick={() => this.votePost('downVote')}
-              />
-            </div>
-            <div className="info-container">
-              <div className="author-container">
-                <button className="title-button">{this.state.title}</button>
-                <h5>Author: {author}</h5>
-              </div>
-            </div>
-            <div className="post-body">
-              <p className="body-text">{body}</p>
-            </div>
-            <div className="metadata-container">
-              <Badge>{commentCount} comments</Badge>
-              <Badge>Posted {this.getTime()}</Badge>
-              <Badge>{category}</Badge>
-              <input
-                className="post-icon"
-                type="image"
-                src={editIcon}
-                alt="Edit"
-                onClick={this.showEditModal}
-              />
-            </div>
-            <hr />
-            <form className="comment-container" onSubmit={this.submitComment}>
-              <textarea
-                className="comment-input"
-                name="commentSection"
-                cols="40"
-                rows="4"
-                placeholder="Leave a comment!"
-              />
-              <textarea className="author-input" placeholder="Author" rows="1" />
-              <Button className="post-button" bsStyle="primary" value="Submit" type="submit">
-                Post
-              </Button>
-              <hr />
-            </form>
-            <ol>{this.generateComments()}</ol>
-          </div>
-          {this.state.show === false || (
-            <EditModal
-              show
-              close={this.closeEditModal}
-              body={body}
-              title={title}
-              id={id}
-              echoChanges={(postTitle, postBody) => this.updatePost(postTitle, postBody)}
-            />
-          )}
-        </div>
-      );
+
+    if (!id) {
+      return <NoMatch />;
     }
-    return <NoMatch />;
+    return (
+      <div>
+        <Header />
+        <NavBar />
+        <div className="post-detail">
+          <div className="vote-container">
+            <input
+              type="image"
+              onMouseOver={e => (e.currentTarget.src = upvoteArrowDark)}
+              onMouseOut={e => (e.currentTarget.src = upvoteArrow)}
+              onClick={() => this.votePost('upVote')}
+              className="vertical-vote arrow"
+              src={upvoteArrow}
+              alt="upVote"
+            />
+            <h4 className="vertical-vote">{voteScore}</h4>
+            <input
+              type="image"
+              onMouseOver={e => (e.currentTarget.src = downvoteArrowDark)}
+              onMouseOut={e => (e.currentTarget.src = downvoteArrow)}
+              className="vertical-vote"
+              src={downvoteArrow}
+              alt="downVote"
+              onClick={() => this.votePost('downVote')}
+            />
+          </div>
+          <div className="info-container">
+            <div className="author-container">
+              <button className="title-button">{this.state.title}</button>
+              <h5>Author: {author}</h5>
+            </div>
+          </div>
+          <div className="post-body">
+            <p className="body-text">{body}</p>
+          </div>
+          <div className="metadata-container">
+            <Badge>{commentCount} comments</Badge>
+            <Badge>Posted {this.getTime()}</Badge>
+            <Badge>{category}</Badge>
+            <input
+              className="post-icon"
+              type="image"
+              src={editIcon}
+              alt="Edit"
+              onClick={this.showEditModal}
+            />
+            <input
+              className="post-icon"
+              type="image"
+              src={deleteIcon}
+              alt="Delete"
+              onClick={this.showDeleteModal}
+            />
+          </div>
+          <hr />
+          <form className="comment-container" onSubmit={this.submitComment}>
+            <textarea
+              className="comment-input"
+              name="commentSection"
+              cols="40"
+              rows="4"
+              placeholder="Leave a comment!"
+            />
+            <textarea className="author-input" placeholder="Author" rows="1" />
+            <Button className="post-button" bsStyle="primary" value="Submit" type="submit">
+              Post
+            </Button>
+            <hr />
+          </form>
+          <ol>{this.generateComments()}</ol>
+        </div>
+        {this.state.showEdit === false || (
+          <EditModal
+            show
+            close={this.closeEditModal}
+            body={body}
+            title={title}
+            id={id}
+            echoChanges={(postTitle, postBody) => this.updatePost(postTitle, postBody)}
+          />
+        )}
+        {this.state.showDelete === false || (
+          <DeleteModal id={id} close={this.closeDeleteModal} returnToPage={this.returnToPage} />
+        )}
+      </div>
+    );
   }
 }
 

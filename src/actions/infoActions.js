@@ -7,6 +7,7 @@ export const VOTE_POST = 'VOTE_POST';
 export const SET_CATEGORY = 'SET_CATEGORY';
 export const MODIFY_POST = 'MODIFY_POST';
 export const DELETE_POST = 'DELETE_POST';
+export const CREATE_POST = 'CREATE_POST';
 
 export const updateCategories = categories => ({
   type: UPDATE_CATEGORIES,
@@ -46,12 +47,19 @@ export const modifyPost = (id, title, body) => dispatch => {
 };
 
 export const deletePost = id => dispatch => {
-  console.log("ID IN DELETE", id);
-  
   ReadableAPI.deletePost(id).then(() => {
     dispatch({
       type: DELETE_POST,
       payload: id
+    });
+  });
+};
+
+export const createPost = (title, body, author, category) => dispatch => {
+  ReadableAPI.createPost(title, body, author, category).then(data => {
+    dispatch({
+      type: CREATE_POST,
+      payload: data
     });
   });
 };
