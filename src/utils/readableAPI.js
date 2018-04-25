@@ -104,11 +104,24 @@ export const createPost = (title, body, author, category) =>
     })
   }).then(res => res.json());
 
-  export const deleteComment = id =>
+export const deleteComment = id =>
   fetch(`${api}/comments/${id}`, {
     method: 'DELETE',
     headers: {
       ...headers,
       'Content-Type': 'application/json'
     }
+  }).then(res => res.json());
+
+export const modifyComment = (id, body) =>
+  fetch(`${api}/comments/${id}`, {
+    method: 'PUT',
+    headers: {
+      ...headers,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      timestamp: Date.now(),
+      body
+    })
   }).then(res => res.json());

@@ -7,7 +7,8 @@ import {
   MODIFY_POST,
   DELETE_POST,
   CREATE_POST,
-  DELETE_COMMENT
+  DELETE_COMMENT,
+  MODIFY_COMMENT
 } from '../actions/infoActions';
 
 const sortPostsBy = (sortBy, posts) => {
@@ -92,7 +93,7 @@ const infoReducer = (state = initialState, action) => {
       };
     case DELETE_COMMENT:
       return {
-        ...state,
+        ...state
       };
     default:
       return state;

@@ -109,19 +109,33 @@ class PostDetail extends Component {
           id={obj.id}
           date={obj.timestamp}
           vote={(id, vote) => this.voteComment(id, vote)}
-          delete={(id) => this.deleteComment(id)}
+          deleteComment={id => this.deleteComment(id)}
+          updateComment={(id, body) => this.modifyComment(id, body)}
         />
       </li>
     ));
   };
 
-  deleteComment = (id) => {
+  modifyComment = (id, body) => {
+    this.setState(prevState => ({
+      comments: prevState.comments.map(obj => {
+        if (obj.id === id) {
+          const newObj = { ...obj };
+          newObj.body = body;
+          return newObj;
+        }
+        return obj;
+      })
+    }));
+  };
+
+  deleteComment = id => {
     const { removeComment } = this.props;
     this.setState(prevState => ({
       comments: prevState.comments.filter(obj => obj.id !== id)
     }));
     removeComment(id);
-  }
+  };
 
   submitComment = e => {
     e.preventDefault();
@@ -275,7 +289,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   votePost: (id, vote) => dispatch(votePost(id, vote)),
-  removeComment: (id) => dispatch(deleteComment(id))
+  removeComment: id => dispatch(deleteComment(id))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostDetail);

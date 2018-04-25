@@ -9,6 +9,7 @@ export const MODIFY_POST = 'MODIFY_POST';
 export const DELETE_POST = 'DELETE_POST';
 export const CREATE_POST = 'CREATE_POST';
 export const DELETE_COMMENT = 'DELETE_COMMENT';
+export const MODIFY_COMMENT = 'MODIFY_COMMENT'
 
 export const updateCategories = categories => ({
   type: UPDATE_CATEGORIES,
@@ -70,6 +71,15 @@ export const deleteComment = id => dispatch => {
     dispatch({
       type: DELETE_COMMENT,
       payload: id
+    });
+  });
+};
+
+export const modifyComment = (id, body) => dispatch => {
+  ReadableAPI.modifyComment(id, body).then(data => {
+    dispatch({
+      type: MODIFY_COMMENT,
+      payload: data
     });
   });
 };
