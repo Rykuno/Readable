@@ -228,3 +228,15 @@ textarea {
   padding: 20px;
   border-radius: 8px;
 }
+
+.no-padding {
+  padding: 0px;
+}
+
+.large-text {
+  font-size: 1.2em;
+}
+
+input:focus {
+  outline: none;
+}

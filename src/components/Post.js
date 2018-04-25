@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { Badge } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { votePost, modifyPost } from '../actions/infoActions';
 import downvoteArrow from '../images/downvote-arrow.jpeg';
 import upvoteArrow from '../images/upvote-arrow.jpeg';
 import editIcon from '../images/edit.png';
 import deleteIcon from '../images/delete.png';
-import * as ReadableAPI from '../utils/readableAPI';
 import EditModal from '../components/EditModal';
 import DeleteModal from '../components/DeleteModal';
 
@@ -26,11 +27,9 @@ class Post extends Component {
   };
 
   votePost = vote => {
-    const { id, votePost, resort } = this.props;
-    ReadableAPI.vote(id, vote).then(() => {
-      votePost(id, vote);
-      resort();
-    });
+    const { id, voteForPost, resort } = this.props;
+    resort();
+    voteForPost(id, vote);
   };
 
   showEditModal = () => {
@@ -59,7 +58,7 @@ class Post extends Component {
 
   render() {
     const {
-      id, title, author, voteScore, category, commentCount, body, modifyPost
+      id, title, author, voteScore, category, commentCount, body, editPost
     } = this.props;
 
     return (
@@ -83,11 +82,11 @@ class Post extends Component {
         </div>
         <div className="info-container">
           <div className="author-container">
-            <Link to={`/r/${category}/${id}`}>{title}</Link>
+            <Link to={`/r/${category}/${id}`} className="large-text">{title}</Link>
             <h5>Author: {author}</h5>
           </div>
           <div className="metadata-container">
-            <button className="comment-button">Comments</button>
+            <button className="comment-button no-padding">Comments</button>
             <Badge className="modesty-spacing">{commentCount}</Badge>
             <button className="comment-button">Category</button>
             <Badge className="modesty-spacing">{category}</Badge>
@@ -115,7 +114,7 @@ class Post extends Component {
                 body={body}
                 title={title}
                 id={id}
-                submit={(postTitle, postBody) => modifyPost(id, postTitle, postBody)}
+                submit={(postTitle, postBody) => editPost(id, postTitle, postBody)}
               />
             )}
             {this.state.showDelete === false || (
@@ -135,11 +134,16 @@ Post.propTypes = {
   category: PropTypes.string.isRequired,
   commentCount: PropTypes.number.isRequired,
   body: PropTypes.string.isRequired,
-  modifyPost: PropTypes.func.isRequired,
+  editPost: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,
   timestamp: PropTypes.number.isRequired,
-  votePost: PropTypes.func.isRequired,
+  voteForPost: PropTypes.func.isRequired,
   resort: PropTypes.func.isRequired
 };
 
-export default Post;
+const mapDispatchToProps = dispatch => ({
+  voteForPost: (id, vote) => dispatch(votePost(id, vote)),
+  editPost: (postID, postTitle, postBody) => modifyPost(postID, postTitle, postBody)
+});
+
+export default connect(null, mapDispatchToProps)(Post);

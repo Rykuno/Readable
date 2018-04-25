@@ -20,23 +20,31 @@ export const updateCategories = () => dispatch => {
   });
 };
 
-export const updatePosts = posts => ({
-  type: UPDATE_POSTS,
-  payload: posts
-});
+export const updatePosts = () => dispatch => {
+  ReadableAPI.getAllPosts().then(data => {
+    dispatch({
+      type: UPDATE_POSTS,
+      payload: data
+    });
+  });
+};
 
 export const updateSortParam = sortBy => ({
   type: UPDATE_SORT_PARAM,
   payload: sortBy
 });
 
-export const votePost = (id, vote) => ({
-  type: VOTE_POST,
-  payload: {
-    id,
-    vote
-  }
-});
+export const votePost = (id, vote) => dispatch => {
+  ReadableAPI.vote(id, vote).then(() => {
+    dispatch({
+      type: VOTE_POST,
+      payload: {
+        id,
+        vote
+      }
+    });
+  });
+};
 
 export const setCategory = category => ({
   type: SET_CATEGORY,

@@ -2,24 +2,23 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Post from '../components/Post';
-import * as ReadableAPI from '../utils/readableAPI';
 import { updatePosts, votePost, updateSortParam, modifyPost } from '../actions/infoActions';
 
 class PostList extends Component {
   componentDidMount() {
-    ReadableAPI.getAllPosts().then(data => {
-      const { addPosts } = this.props;
-      addPosts(data);
-    });
+    const { addPosts } = this.props;
+    addPosts();
   }
 
   sortPosts = () => {
-    const { sortBy, sortPostsBy } = this.props;
-    sortPostsBy(sortBy);
+    setTimeout(() => {
+      const { sortBy, sortPostsBy } = this.props;
+      sortPostsBy(sortBy);
+    }, 0);
   };
 
   populatePosts = () => {
-    const { voteForPost, searchCategory, editPost } = this.props;
+    const { searchCategory } = this.props;
     let { posts } = this.props;
 
     if (searchCategory) {
@@ -46,9 +45,7 @@ class PostList extends Component {
             author={author}
             category={category}
             commentCount={commentCount}
-            votePost={(postID, vote) => voteForPost(postID, vote)}
             resort={this.sortPosts}
-            modifyPost={(postID, postTitle, postBody) => editPost(postID, postTitle, postBody)}
           />
         </li>
       );

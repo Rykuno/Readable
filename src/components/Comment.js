@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Badge } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import downvoteArrow from '../images/downvote-arrow.jpeg';
 import upvoteArrow from '../images/upvote-arrow.jpeg';
@@ -10,6 +11,15 @@ import EditCommentModal from '../components/EditCommentModal';
 class Comment extends Component {
   state = {
     showEdit: false
+  };
+
+  getTime = () => {
+    const { timestamp } = this.props;
+    const date = new Date(timestamp);
+    const month = date.getMonth();
+    const day = date.getDate();
+    const year = date.getUTCFullYear();
+    return `${month}-${day}-${year}`;
   };
 
   showEditModal = () => {
@@ -69,6 +79,7 @@ class Comment extends Component {
             alt="Edit"
             onClick={this.showEditModal}
           />
+          <Badge className="float-right">{this.getTime()}</Badge>
         </div>
         {this.state.showEdit === false || (
           <EditCommentModal

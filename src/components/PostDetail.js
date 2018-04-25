@@ -20,7 +20,9 @@ class PostDetail extends Component {
   state = {
     showEdit: false,
     showDelete: false,
-    comments: []
+    comments: [],
+    bodyField: '',
+    authorField: ''
   };
 
   componentDidMount() {
@@ -108,6 +110,7 @@ class PostDetail extends Component {
           body={obj.body}
           author={obj.author}
           voteScore={obj.voteScore}
+          timestamp={obj.timestamp}
           id={obj.id}
           date={obj.timestamp}
           vote={(id, vote) => this.voteComment(id, vote)}
@@ -141,12 +144,12 @@ class PostDetail extends Component {
 
   submitComment = e => {
     e.preventDefault();
-    const body = e.target[0].value;
-    const author = e.target[1].value;
-    const { id } = this.state;
-    ReadableAPI.postComment(body, author, id).then(data => {
+    const { authorField, bodyField, id } = this.state;
+    ReadableAPI.postComment(bodyField, authorField, id).then(data => {
       this.setState(prevState => ({
-        comments: [...prevState.comments, data]
+        comments: [...prevState.comments, data],
+        bodyField: '',
+        authorField: ''
       }));
     });
   };
@@ -186,9 +189,34 @@ class PostDetail extends Component {
     this.props.history.goBack();
   };
 
+  handleChange = e => {
+    switch (e.target.name) {
+      case 'commentBody':
+        this.setState({
+          bodyField: e.target.value
+        });
+        break;
+      case 'commentAuthor':
+        this.setState({
+          authorField: e.target.value
+        });
+        break;
+      default:
+        break;
+    }
+  };
+
   render() {
     const {
-      title, id, body, author, category, voteScore, commentCount
+      title,
+      id,
+      body,
+      author,
+      category,
+      voteScore,
+      commentCount,
+      bodyField,
+      authorField
     } = this.state;
 
     if (!id) {
@@ -248,12 +276,21 @@ class PostDetail extends Component {
           <form className="comment-container" onSubmit={this.submitComment}>
             <textarea
               className="comment-input"
-              name="commentSection"
               cols="40"
+              name="commentBody"
               rows="4"
               placeholder="Leave a comment!"
+              value={bodyField}
+              onChange={this.handleChange}
             />
-            <textarea className="author-input" placeholder="Author" rows="1" />
+            <textarea
+              className="author-input"
+              placeholder="Author"
+              name="commentAuthor"
+              rows="1"
+              value={authorField}
+              onChange={this.handleChange}
+            />
             <Button className="post-button" bsStyle="primary" value="Submit" type="submit">
               Post
             </Button>

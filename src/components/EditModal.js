@@ -115,14 +115,18 @@ class EditModal extends Component {
   }
 }
 
+EditModal.defaultProps = {
+  echoChanges: () => {}
+};
+
 EditModal.propTypes = {
-  show: PropTypes.func.isRequired,
+  show: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
   body: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   editPost: PropTypes.func.isRequired,
   close: PropTypes.func.isRequired,
-  echoChanges: PropTypes.func.isRequired
+  echoChanges: PropTypes.func
 };
 
 const mapDispatchToProps = dispatch => ({

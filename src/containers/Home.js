@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { MenuItem, DropdownButton, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { updateCategories, updateSortParam, setCategory } from '../actions/infoActions';
-import * as ReadableAPI from '../utils/readableAPI';
 import Header from '../components/Header';
 import NavBar from '../components/NavBar';
 import PostList from './PostList';

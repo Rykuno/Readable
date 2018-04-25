@@ -40,11 +40,15 @@ class DeleteModal extends Component {
   }
 }
 
+DeleteModal.defaultProps = {
+  returnToPage: () => {}
+};
+
 DeleteModal.propTypes = {
   removePost: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,
   close: PropTypes.func.isRequired,
-  returnToPage: PropTypes.func.isRequired
+  returnToPage: PropTypes.func
 };
 
 const mapDispatchToProps = dispatch => ({
