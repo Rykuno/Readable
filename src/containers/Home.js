@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { MenuItem, DropdownButton, Button } from 'react-bootstrap';
+import PropTypes from 'prop-types';
 import { updateCategories, updateSortParam, setCategory } from '../actions/infoActions';
 import * as ReadableAPI from '../utils/readableAPI';
-import { MenuItem, DropdownButton, Button } from 'react-bootstrap';
 import Header from '../components/Header';
 import NavBar from '../components/NavBar';
 import PostList from './PostList';
@@ -15,15 +16,16 @@ class Home extends Component {
 
   componentDidMount() {
     this.fetchCategories();
-    if (this.props.match.params.category) {
-      this.props.setCategory(this.props.match.params.category);
+    const { changeCategory } = this.props;
+    const { category } = this.props.match.params;
+    if (category) {
+      changeCategory(category);
     }
   }
 
-  showCreateModal = () => {
-    this.setState({
-      showCreate: true
-    });
+  onSubmit = e => {
+    const { sortPostsBy } = this.props;
+    sortPostsBy(e);
   };
 
   closeCreateModal = () => {
@@ -32,16 +34,15 @@ class Home extends Component {
     });
   };
 
-  onSubmit = e => {
-    const { sortPostsBy } = this.props;
-    sortPostsBy(e);
+  showCreateModal = () => {
+    this.setState({
+      showCreate: true
+    });
   };
 
   fetchCategories = () => {
-    ReadableAPI.getAllCategories().then(data => {
-      const { addCategories } = this.props;
-      addCategories(data);
-    });
+    const { addCategories } = this.props;
+    addCategories();
   };
 
   render() {
@@ -56,6 +57,7 @@ class Home extends Component {
             className="drop-down-menu"
             onSelect={this.onSubmit}
             title="Sort By"
+            id="categoriesDropDown"
           >
             <MenuItem active={sortBy === 'mostRecent'} eventKey="mostRecent">
               Most Recent
@@ -64,21 +66,30 @@ class Home extends Component {
               Votes
             </MenuItem>
           </DropdownButton>
-          <Button bsStyle="primary" onClick={this.showCreateModal}>Create Post</Button>
+          <Button bsStyle="primary" onClick={this.showCreateModal}>
+            Create Post
+          </Button>
           <hr />
           <PostList />
         </div>
 
-        {this.state.showCreate === false || (
-          <CreatePostModal
-            show
-            close={this.closeCreateModal}
-          />
-        )}
+        {this.state.showCreate === false || <CreatePostModal show close={this.closeCreateModal} />}
       </div>
     );
   }
 }
+
+Home.propTypes = {
+  changeCategory: PropTypes.func.isRequired,
+  sortPostsBy: PropTypes.func.isRequired,
+  addCategories: PropTypes.func.isRequired,
+  sortBy: PropTypes.string.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      category: PropTypes.node
+    }).isRequired
+  }).isRequired
+};
 
 const mapStateToProps = state => ({
   info: state.info,
@@ -88,7 +99,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   addCategories: categories => dispatch(updateCategories(categories)),
   sortPostsBy: sortBy => dispatch(updateSortParam(sortBy)),
-  setCategory: category => dispatch(setCategory(category))
+  changeCategory: category => dispatch(setCategory(category))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { Button, Modal } from 'react-bootstrap';
-import * as ReadableAPI from '../utils/readableAPI';
 import { deletePost } from '../actions/infoActions';
 
 class DeleteModal extends Component {
   removePost = () => {
-    const { removePost, id, close, returnToPage } = this.props;
+    const {
+      removePost, id, close, returnToPage
+    } = this.props;
     removePost(id);
 
     if (returnToPage) {
@@ -17,10 +19,8 @@ class DeleteModal extends Component {
     close();
   };
 
-  render() {    
-    const { close, id } = this.props;
-    console.log('ID: ', id);
-
+  render() {
+    const { close } = this.props;
     return (
       <div className="static-modal">
         <Modal.Dialog>
@@ -39,6 +39,13 @@ class DeleteModal extends Component {
     );
   }
 }
+
+DeleteModal.propTypes = {
+  removePost: PropTypes.func.isRequired,
+  id: PropTypes.string.isRequired,
+  close: PropTypes.func.isRequired,
+  returnToPage: PropTypes.func.isRequired
+};
 
 const mapDispatchToProps = dispatch => ({
   removePost: id => dispatch(deletePost(id))

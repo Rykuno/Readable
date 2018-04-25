@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import swal from 'sweetalert';
+import PropTypes from 'prop-types';
 import { Modal, ControlLabel, FormControl, Button, FormGroup, HelpBlock } from 'react-bootstrap';
 import * as ReadableAPI from '../utils/readableAPI';
 import { modifyComment } from '../actions/infoActions';
@@ -14,10 +16,8 @@ class EditCommentModal extends Component {
   componentDidMount() {
     const { show } = this.props;
     if (show === true) {
-      console.log('Should Show');
       this.handleShow();
     } else {
-      console.log('Should Not Show');
       this.handleClose();
     }
   }
@@ -53,11 +53,14 @@ class EditCommentModal extends Component {
   submitChanges = () => {
     const { body } = this.state;
     const { id, close, updateComment } = this.props;
-    console.log(body);
-    ReadableAPI.modifyComment(id, body).then(data => {
-      updateComment(id, body);
-      close();
-    });
+    ReadableAPI.modifyComment(id, body)
+      .then(() => {
+        updateComment(id, body);
+        close();
+      })
+      .catch(e => {
+        swal('Oh No!', e, 'error');
+      });
   };
 
   render() {
@@ -96,6 +99,14 @@ class EditCommentModal extends Component {
     );
   }
 }
+
+EditCommentModal.propTypes = {
+  show: PropTypes.bool.isRequired,
+  body: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  close: PropTypes.func.isRequired,
+  updateComment: PropTypes.func.isRequired
+};
 
 const mapDispatchToProps = dispatch => ({
   modifyComment: (id, title, body) => dispatch(modifyComment(id, body))

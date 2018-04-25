@@ -1,21 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { Navbar, MenuItem, Nav, NavItem, NavDropdown } from 'react-bootstrap';
 import { setCategory } from '../actions/infoActions';
 
 class NavBar extends Component {
   populateCategories = () => {
-    const { categories, changeCategory } = this.props;
+    const { categories } = this.props;    
     const categoryList = categories.map(obj => (
-      <MenuItem href={`/r/${obj.name}`} eventKey={3.2}>
+      <MenuItem href={`/r/${obj.name}`} key={obj.path}>
         {obj.name}
       </MenuItem>
     ));
-    categoryList.unshift(<MenuItem divider />);
-    categoryList.unshift(
-      <MenuItem href="/" eventKey={3.1}>
-        All
-      </MenuItem>);
+    categoryList.unshift(<MenuItem key={3.2} divider />);
+    categoryList.unshift(<MenuItem href="/" key={3.3}>All</MenuItem>);
     return categoryList;
   };
 
@@ -28,13 +26,10 @@ class NavBar extends Component {
           </Navbar.Brand>
         </Navbar.Header>
         <Nav>
-          <NavItem eventKey={1} href="#">
+          <NavItem key={1} href="/about">
             About
           </NavItem>
-          <NavItem eventKey={2} href="#">
-            Link
-          </NavItem>
-          <NavDropdown eventKey={3} title="Categories" id="basic-nav-dropdown">
+          <NavDropdown key={3} title="Categories" id="basic-nav-dropdown">
             {this.populateCategories()}
           </NavDropdown>
         </Nav>
@@ -42,6 +37,13 @@ class NavBar extends Component {
     );
   }
 }
+
+NavBar.propTypes = {
+  categories: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+    path: PropTypes.string
+  })).isRequired
+};
 
 const mapStateToProps = state => ({
   categories: state.info.categories

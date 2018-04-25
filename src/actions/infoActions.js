@@ -9,12 +9,16 @@ export const MODIFY_POST = 'MODIFY_POST';
 export const DELETE_POST = 'DELETE_POST';
 export const CREATE_POST = 'CREATE_POST';
 export const DELETE_COMMENT = 'DELETE_COMMENT';
-export const MODIFY_COMMENT = 'MODIFY_COMMENT'
+export const MODIFY_COMMENT = 'MODIFY_COMMENT';
 
-export const updateCategories = categories => ({
-  type: UPDATE_CATEGORIES,
-  payload: categories
-});
+export const updateCategories = () => dispatch => {
+  ReadableAPI.getAllCategories().then(data => {
+    dispatch({
+      type: UPDATE_CATEGORIES,
+      payload: data
+    });
+  });
+};
 
 export const updatePosts = posts => ({
   type: UPDATE_POSTS,

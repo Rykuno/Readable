@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { Modal, ControlLabel, FormControl, Button, FormGroup, HelpBlock } from 'react-bootstrap';
-import * as ReadableAPI from '../utils/readableAPI';
 import { createPost } from '../actions/infoActions';
 
 class CreatePostModal extends Component {
@@ -17,10 +17,8 @@ class CreatePostModal extends Component {
   componentDidMount() {
     const { show } = this.props;
     if (show === true) {
-      console.log('Should Show');
       this.handleShow();
     } else {
-      console.log('Should Not Show');
       this.handleClose();
     }
   }
@@ -30,11 +28,8 @@ class CreatePostModal extends Component {
   };
 
   handleShow = () => {
-    const { title, body } = this.props;
     this.setState({
-      show: true,
-      title,
-      body
+      show: true
     });
   };
 
@@ -73,8 +68,8 @@ class CreatePostModal extends Component {
     const {
       title, body, author, category
     } = this.state;
-    const { createPost, close } = this.props;
-    createPost(title, body, author, category);
+    const { createNewPost, close } = this.props;
+    createNewPost(title, body, author, category);
     close();
   };
 
@@ -83,6 +78,7 @@ class CreatePostModal extends Component {
     const {
       title, body, author, error
     } = this.state;
+
     return (
       <div>
         <Modal show={this.state.show} onHide={close}>
@@ -128,11 +124,7 @@ class CreatePostModal extends Component {
 
               <FormGroup controlId="formControlsSelect">
                 <ControlLabel>Category:</ControlLabel>
-                <FormControl
-                  componentClass="select"
-                  name="category"
-                  onChange={this.handleChange}
-                >
+                <FormControl componentClass="select" name="category" onChange={this.handleChange}>
                   <option value="react">react</option>
                   <option value="redux">redux</option>
                   <option value="udacity">udacity</option>
@@ -152,8 +144,15 @@ class CreatePostModal extends Component {
   }
 }
 
+CreatePostModal.propTypes = {
+  close: PropTypes.func.isRequired,
+  createNewPost: PropTypes.func.isRequired,
+  show: PropTypes.bool.isRequired
+};
+
 const mapDispatchToProps = dispatch => ({
-  createPost: (title, body, author, category) => dispatch(createPost(title, body, author, category))
+  createNewPost: (title, body, author, category) =>
+    dispatch(createPost(title, body, author, category))
 });
 
 export default connect(null, mapDispatchToProps)(CreatePostModal);

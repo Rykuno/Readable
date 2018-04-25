@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Badge, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import swal from 'sweetalert';
 import { votePost, deleteComment } from '../actions/infoActions';
 import NavBar from '../components/NavBar';
 import Header from '../components/Header';
 import Comment from '../components/Comment';
 import downvoteArrow from '../images/downvote-arrow.jpeg';
-import downvoteArrowDark from '../images/downvote-dark.jpeg';
-import upvoteArrowDark from '../images/upvote-dark.jpeg';
 import upvoteArrow from '../images/upvote-arrow.jpeg';
 import * as ReadableAPI from '../utils/readableAPI';
 import EditModal from '../components/EditModal';
@@ -39,7 +39,7 @@ class PostDetail extends Component {
 
   votePost = vote => {
     const { id } = this.state;
-    ReadableAPI.vote(id, vote).then(data => {
+    ReadableAPI.vote(id, vote).then(() => {
       this.setState(state => ({
         voteScore: vote === 'upVote' ? state.voteScore + 1 : state.voteScore - 1
       }));
@@ -49,10 +49,12 @@ class PostDetail extends Component {
 
   voteComment = (id, vote) => {
     ReadableAPI.voteComment(id, vote)
-      .then(data => {
+      .then(() => {
         const newComments = this.state.comments.map(obj => {
           if (obj.id === id) {
-            obj.voteScore = vote === 'upVote' ? obj.voteScore + 1 : obj.voteScore - 1;
+            const newObj = { ...obj };
+            newObj.voteScore = vote === 'upVote' ? obj.voteScore + 1 : obj.voteScore - 1;
+            return newObj;
           }
           return obj;
         });
@@ -62,7 +64,7 @@ class PostDetail extends Component {
         });
       })
       .catch(e => {
-        console.log(e);
+        swal(e);
       });
   };
 
@@ -76,7 +78,7 @@ class PostDetail extends Component {
         }));
       })
       .catch(e => {
-        alert(e);
+        swal(e);
       });
   };
 
@@ -89,7 +91,7 @@ class PostDetail extends Component {
         });
       })
       .catch(e => {
-        console.log(e);
+        swal(e);
       });
   };
 
@@ -101,7 +103,7 @@ class PostDetail extends Component {
     }
 
     return comments.map(obj => (
-      <li>
+      <li key={obj.id}>
         <Comment
           body={obj.body}
           author={obj.author}
@@ -185,8 +187,6 @@ class PostDetail extends Component {
   };
 
   render() {
-    console.log('HISTORY: ', this.props.history);
-
     const {
       title, id, body, author, category, voteScore, commentCount
     } = this.state;
@@ -202,8 +202,6 @@ class PostDetail extends Component {
           <div className="vote-container">
             <input
               type="image"
-              onMouseOver={e => (e.currentTarget.src = upvoteArrowDark)}
-              onMouseOut={e => (e.currentTarget.src = upvoteArrow)}
               onClick={() => this.votePost('upVote')}
               className="vertical-vote arrow"
               src={upvoteArrow}
@@ -212,8 +210,6 @@ class PostDetail extends Component {
             <h4 className="vertical-vote">{voteScore}</h4>
             <input
               type="image"
-              onMouseOver={e => (e.currentTarget.src = downvoteArrowDark)}
-              onMouseOut={e => (e.currentTarget.src = downvoteArrow)}
               className="vertical-vote"
               src={downvoteArrow}
               alt="downVote"
@@ -282,6 +278,18 @@ class PostDetail extends Component {
     );
   }
 }
+
+PostDetail.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.node
+    }).isRequired
+  }).isRequired,
+  history: PropTypes.shape({
+    goBack: PropTypes.func.isRequired
+  }).isRequired,
+  removeComment: PropTypes.func.isRequired
+};
 
 const mapStateToProps = state => ({
   posts: state.info.posts

@@ -221,3 +221,10 @@ textarea {
 .no-margin {
   margin: 0px;
 }
+
+.jumbotron-about {
+  width: 90%;
+  margin: auto;
+  padding: 20px;
+  border-radius: 8px;
+}

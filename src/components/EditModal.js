@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { Modal, ControlLabel, FormControl, Button, FormGroup, HelpBlock } from 'react-bootstrap';
-import * as ReadableAPI from '../utils/readableAPI';
 import { modifyPost } from '../actions/infoActions';
 
 class EditModal extends Component {
@@ -15,10 +15,8 @@ class EditModal extends Component {
   componentDidMount() {
     const { show } = this.props;
     if (show === true) {
-      console.log('Should Show');
       this.handleShow();
     } else {
-      console.log('Should Not Show');
       this.handleClose();
     }
   }
@@ -60,9 +58,9 @@ class EditModal extends Component {
   submitChanges = () => {
     const { body, title } = this.state;
     const {
-      id, modifyPost, close, echoChanges
+      id, editPost, close, echoChanges
     } = this.props;
-    modifyPost(id, title, body);
+    editPost(id, title, body);
     if (echoChanges) {
       echoChanges(title, body);
     }
@@ -117,8 +115,18 @@ class EditModal extends Component {
   }
 }
 
+EditModal.propTypes = {
+  show: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+  body: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  editPost: PropTypes.func.isRequired,
+  close: PropTypes.func.isRequired,
+  echoChanges: PropTypes.func.isRequired
+};
+
 const mapDispatchToProps = dispatch => ({
-  modifyPost: (id, title, body) => dispatch(modifyPost(id, title, body))
+  editPost: (id, title, body) => dispatch(modifyPost(id, title, body))
 });
 
 export default connect(null, mapDispatchToProps)(EditModal);

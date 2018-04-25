@@ -7,8 +7,7 @@ import {
   MODIFY_POST,
   DELETE_POST,
   CREATE_POST,
-  DELETE_COMMENT,
-  MODIFY_COMMENT
+  DELETE_COMMENT
 } from '../actions/infoActions';
 
 const sortPostsBy = (sortBy, posts) => {
@@ -18,7 +17,7 @@ const sortPostsBy = (sortBy, posts) => {
     case 'votes':
       return posts.slice().sort((a, b) => a.voteScore < b.voteScore);
     default:
-      break;
+      return posts;
   }
 };
 
@@ -55,8 +54,10 @@ const infoReducer = (state = initialState, action) => {
         ...state,
         posts: state.posts.slice().map(obj => {
           if (obj.id === action.payload.id) {
-            obj.voteScore =
+            const newObj = { ...obj };
+            newObj.voteScore =
               action.payload.vote === 'upVote' ? obj.voteScore + 1 : obj.voteScore - 1;
+            return newObj;
           }
           return obj;
         })

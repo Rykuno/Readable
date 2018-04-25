@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import downvoteArrow from '../images/downvote-arrow.jpeg';
-import downvoteArrowDark from '../images/downvote-dark.jpeg';
-import upvoteArrowDark from '../images/upvote-dark.jpeg';
 import upvoteArrow from '../images/upvote-arrow.jpeg';
 import editIcon from '../images/edit.png';
 import deleteIcon from '../images/delete.png';
@@ -29,6 +28,7 @@ class Comment extends Component {
     const {
       deleteComment, id, body, author, vote, voteScore, updateComment
     } = this.props;
+
     return (
       <div className="wrapper border">
         <div className="vote-container">
@@ -36,6 +36,7 @@ class Comment extends Component {
             className="vertical-vote comment-arrow"
             type="image"
             src={upvoteArrow}
+            alt="upVote"
             onClick={() => vote(id, 'upVote')}
           />
           <h5>{voteScore}</h5>
@@ -43,6 +44,7 @@ class Comment extends Component {
             className="vertical-vote comment-arrow"
             type="image"
             src={downvoteArrow}
+            alt="downVote"
             onClick={() => vote(id, 'downVote')}
           />
         </div>
@@ -81,5 +83,15 @@ class Comment extends Component {
     );
   }
 }
+
+Comment.propTypes = {
+  deleteComment: PropTypes.func.isRequired,
+  id: PropTypes.string.isRequired,
+  body: PropTypes.string.isRequired,
+  author: PropTypes.string.isRequired,
+  vote: PropTypes.func.isRequired,
+  voteScore: PropTypes.number.isRequired,
+  updateComment: PropTypes.func.isRequired
+};
 
 export default Comment;
