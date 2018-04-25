@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Badge, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { votePost } from '../actions/infoActions';
+import { votePost, deleteComment } from '../actions/infoActions';
 import NavBar from '../components/NavBar';
 import Header from '../components/Header';
 import Comment from '../components/Comment';
@@ -19,7 +19,8 @@ import deleteIcon from '../images/delete.png';
 class PostDetail extends Component {
   state = {
     showEdit: false,
-    showDelete: false
+    showDelete: false,
+    comments: []
   };
 
   componentDidMount() {
@@ -108,10 +109,19 @@ class PostDetail extends Component {
           id={obj.id}
           date={obj.timestamp}
           vote={(id, vote) => this.voteComment(id, vote)}
+          delete={(id) => this.deleteComment(id)}
         />
       </li>
     ));
   };
+
+  deleteComment = (id) => {
+    const { removeComment } = this.props;
+    this.setState(prevState => ({
+      comments: prevState.comments.filter(obj => obj.id !== id)
+    }));
+    removeComment(id);
+  }
 
   submitComment = e => {
     e.preventDefault();
@@ -264,7 +274,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  votePost: (id, vote) => dispatch(votePost(id, vote))
+  votePost: (id, vote) => dispatch(votePost(id, vote)),
+  removeComment: (id) => dispatch(deleteComment(id))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostDetail);

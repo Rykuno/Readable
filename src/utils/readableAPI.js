@@ -1,7 +1,7 @@
 const api = 'http://localhost:3001';
 
 // Generate a unique token for storing your bookshelf data on the backend server.
-let token = localStorage.token;
+let token = 5;
 console.log('token: ', token);
 
 if (!token) {
@@ -50,7 +50,7 @@ export const postComment = (body, author, parentId) =>
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      id: new Date().valueOf(),
+      id: `${new Date().valueOf()}f`,
       timestamp: Date.now(),
       body,
       author,
@@ -95,11 +95,20 @@ export const createPost = (title, body, author, category) =>
       'Content-Type': 'application/json'
     },
     body: JSON.stringify({
-      id: new Date().valueOf(),
+      id: `${new Date().valueOf()}f`,
       timestamp: Date.now(),
       title,
       body,
       author,
       category
     })
+  }).then(res => res.json());
+
+  export const deleteComment = id =>
+  fetch(`${api}/comments/${id}`, {
+    method: 'DELETE',
+    headers: {
+      ...headers,
+      'Content-Type': 'application/json'
+    }
   }).then(res => res.json());
