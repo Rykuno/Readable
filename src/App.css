@@ -33,6 +33,7 @@
   position: relative;
   float: left;
   width: 10%;
+  margin-top: 10px;
 }
 
 .vertical-vote {
@@ -75,12 +76,12 @@ ul {
   float: left;
 }
 
-.info-container>h4:hover {
+.info-container > h4:hover {
   color: blue;
   cursor: pointer;
 }
 
-.info-container>button {
+.info-container > button {
   padding-left: 0px;
   padding-right: 2px;
 }
@@ -89,3 +90,118 @@ ul {
   margin-right: 10px;
 }
 
+.post-icon {
+  height: 100%;
+  vertical-align: middle;
+}
+
+.author-container {
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+}
+
+.metadata-container {
+  margin: 0px;
+  padding: 0px;
+  margin-left: 0px;
+  display: inline;
+}
+
+.title-button {
+  background: transparent;
+  border: none;
+  font-size: 120%;
+}
+
+.title-button:hover {
+  color: blue;
+}
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+.post-detail {
+  width: 50%;
+  margin: auto;
+  text-align: center;
+}
+
+.post-body {
+  margin-top: 20px;
+  text-align: left;
+  border: 1px solid gray;
+  border-radius: 8px;
+}
+
+.body-text {
+  margin: 0px;
+  padding: 5px;
+}
+
+.comment-input {
+  border: 1px solid black;
+  height: 70px;
+  border-radius: 4px;
+  width: 70%;
+  margin-right: 10px;
+}
+
+.author-input {
+  border: 1px solid black;
+  height: 35px;
+  border-radius: 4px;
+  width: 60%;
+  margin-right: 10px;
+  margin-left: 0px;
+}
+
+.comment-container > button {
+  margin-bottom: 30px;
+}
+
+div.inline {
+  float: left;
+}
+
+span {
+  margin: 5px;
+}
+
+ol {
+  list-style: none;
+}
+
+.info-container > p {
+  margin: 15px;
+}
+
+.border {
+  border: 1px solid gray;
+  border-radius: 4px;
+}
+h5 {
+  vertical-align: middle;
+}
+
+.comment-arrow {
+  margin: auto;
+  vertical-align: middle;
+}
+
+textarea {
+  resize: none;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.title-input {
+  border: 1px solid black;
+  border-radius: 4px;
+  width: 70%;
+}

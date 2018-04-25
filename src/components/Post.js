@@ -1,13 +1,22 @@
 import React, { Component } from 'react';
-import { Badge, DropdownButton, MenuItem } from 'react-bootstrap';
+import { Badge, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import downvoteArrow from '../images/downvote-arrow.jpeg';
 import downvoteArrowDark from '../images/downvote-dark.jpeg';
 import upvoteArrowDark from '../images/upvote-dark.jpeg';
 import upvoteArrow from '../images/upvote-arrow.jpeg';
-
+import editIcon from '../images/edit.png';
+import deleteIcon from '../images/delete.png';
 import * as ReadableAPI from '../utils/readableAPI';
+import EditModal from '../components/EditModal';
+import DeleteModal from '../components/DeleteModal';
 
 class Post extends Component {
+  state = {
+    showEdit: false,
+    showDelete: false
+  };
+
   getTime = () => {
     const { timestamp } = this.props;
     const date = new Date(timestamp);
@@ -25,10 +34,43 @@ class Post extends Component {
     });
   };
 
+  showEditModal = () => {
+    this.setState({
+      showEdit: true
+    });
+  };
+
+  closeEditModal = () => {
+    this.setState({
+      showEdit: false
+    });
+  };
+
+  showDeleteModal = () => {
+    this.setState({
+      showDelete: true
+    });
+  };
+
+  closeDeleteModal = () => {
+    this.setState({
+      showDelete: false
+    });
+  };
+
   render() {
     const {
-      id, title, timestamp, author, voteScore, category, commentCount
+      id,
+      title,
+      timestamp,
+      author,
+      voteScore,
+      category,
+      commentCount,
+      body,
+      modifyPost
     } = this.props;
+
     return (
       <li>
         <div className="wrapper">
@@ -52,15 +94,46 @@ class Post extends Component {
             />
           </div>
           <div className="info-container">
-            <h4>{title}</h4>
-            <h5>Author: {author}</h5>
-            <button className="comment-button">Comments</button>
-            <Badge className="modesty-spacing">{commentCount}</Badge>
-            <button className="comment-button">Category</button>
-            <Badge className="modesty-spacing">{category}</Badge>
-            <button className="comment-button">Submitted</button>
-            <Badge className="modesty-spacing">{this.getTime()}</Badge>
-            <button className="comment-button">Edit</button>
+            <div className="author-container">
+              <Link to={`/r/${category}/${id}`}>{title}</Link>
+              <h5>Author: {author}</h5>
+            </div>
+            <div className="metadata-container">
+              <button className="comment-button">Comments</button>
+              <Badge className="modesty-spacing">{commentCount}</Badge>
+              <button className="comment-button">Category</button>
+              <Badge className="modesty-spacing">{category}</Badge>
+              <button className="comment-button">Submitted</button>
+              <Badge className="modesty-spacing">{this.getTime()}</Badge>
+              <input
+                className="post-icon"
+                type="image"
+                src={editIcon}
+                alt="Edit"
+                onClick={this.showEditModal}
+              />
+              <input
+                className="post-icon"
+                type="image"
+                src={deleteIcon}
+                alt="Delete"
+                onClick={this.showDeleteModal}
+              />
+
+              {this.state.showEdit === false || (
+                <EditModal
+                  show
+                  close={this.closeEditModal}
+                  body={body}
+                  title={title}
+                  id={id}
+                  submit={(postTitle, postBody) => modifyPost(id, postTitle, postBody)}
+                />
+              )}
+              {this.state.showDelete === false || (
+                <DeleteModal id={id} close={this.closeDeleteModal} />
+              )}
+            </div>
           </div>
         </div>
       </li>

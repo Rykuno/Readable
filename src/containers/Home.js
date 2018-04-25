@@ -15,16 +15,16 @@ class Home extends Component {
     }
   }
 
+  onSubmit = e => {
+    const { sortPostsBy } = this.props;
+    sortPostsBy(e);
+  };
+
   fetchCategories = () => {
     ReadableAPI.getAllCategories().then(data => {
       const { addCategories } = this.props;
       addCategories(data);
     });
-  };
-
-  onSubmit = e => {
-    const { sortPostsBy } = this.props;
-    sortPostsBy(e);
   };
 
   render() {

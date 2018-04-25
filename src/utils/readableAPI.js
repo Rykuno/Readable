@@ -36,3 +36,53 @@ export const vote = (id, option) =>
   })
     .then(res => res.json())
     .then(data => data);
+
+export const getPost = id => fetch(`${api}/posts/${id}`, { headers }).then(res => res.json());
+
+export const getComments = id =>
+  fetch(`${api}/posts/${id}/comments`, { headers }).then(res => res.json());
+
+export const postComment = (body, author, parentId) =>
+  fetch(`${api}/comments`, {
+    method: 'POST',
+    headers: {
+      ...headers,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      id: new Date().valueOf(),
+      timestamp: Date.now(),
+      body,
+      author,
+      parentId
+    })
+  }).then(res => res.json());
+
+export const voteComment = (id, option) =>
+  fetch(`${api}/comments/${id}`, {
+    method: 'POST',
+    headers: {
+      ...headers,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ option })
+  }).then(res => res.json());
+
+export const modifyPost = (id, title, body) =>
+  fetch(`${api}/posts/${id}`, {
+    method: 'PUT',
+    headers: {
+      ...headers,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ title, body })
+  }).then(res => res.json());
+
+export const deletePost = id =>
+  fetch(`${api}/posts/${id}`, {
+    method: 'DELETE',
+    headers: {
+      ...headers,
+      'Content-Type': 'application/json'
+    }
+  }).then(res => res.json());

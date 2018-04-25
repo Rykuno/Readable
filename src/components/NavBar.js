@@ -7,7 +7,7 @@ class NavBar extends Component {
   populateCategories = () => {
     const { categories, changeCategory } = this.props;
     const categoryList = categories.map(obj => (
-      <MenuItem href={`/${obj.name}`} eventKey={3.1}>
+      <MenuItem href={`/r/${obj.name}`} eventKey={3.2}>
         {obj.name}
       </MenuItem>
     ));

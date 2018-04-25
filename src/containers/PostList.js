@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Post from '../components/Post';
 import * as ReadableAPI from '../utils/readableAPI';
-import { updatePosts, votePost, updateSortParam } from '../actions/infoActions';
+import { updatePosts, votePost, updateSortParam, modifyPost } from '../actions/infoActions';
 
 class PostList extends Component {
   componentDidMount() {
@@ -18,16 +18,23 @@ class PostList extends Component {
 
   populatePosts = () => {
     let { posts, votePost, searchCategory } = this.props;
+
     if (searchCategory) {
       posts = posts.filter(obj => obj.category === searchCategory);
     }
+
+    if (posts.length === 0) {
+      return <p>There doesn&#39;t seem to be anything here</p>;
+    }
+
     return posts.map(obj => {
       const {
-        id, title, timestamp, author, voteScore, category, commentCount
+        id, title, body, timestamp, author, voteScore, category, commentCount
       } = obj;
       return (
         <Post
           title={title}
+          body={body}
           voteScore={voteScore}
           id={id}
           timestamp={timestamp}
@@ -36,6 +43,9 @@ class PostList extends Component {
           commentCount={commentCount}
           votePost={(postID, vote) => votePost(postID, vote)}
           resort={this.sortPosts}
+          modifyPost={(postID, postTitle, postBody) =>
+            this.props.modifyPost(postID, postTitle, postBody)
+          }
         />
       );
     });
@@ -56,7 +66,7 @@ const mapStateToProps = state => ({
   searchCategory: state.info.searchCategory
 });
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = dispatch => ({
   addPosts: posts => dispatch(updatePosts(posts)),
   votePost: (id, vote) => dispatch(votePost(id, vote)),
   sortPostsBy: sortBy => dispatch(updateSortParam(sortBy))
