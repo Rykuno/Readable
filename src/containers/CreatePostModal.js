@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Modal, ControlLabel, FormControl, Button, FormGroup, HelpBlock } from 'react-bootstrap';
+import { Modal, ControlLabel, FormControl, Button, FormGroup } from 'react-bootstrap';
 import { createPost } from '../actions/infoActions';
 
 class CreatePostModal extends Component {
@@ -87,7 +87,10 @@ class CreatePostModal extends Component {
           </Modal.Header>
           <Modal.Body>
             <form>
-              <FormGroup controlId="title-form">
+              <FormGroup
+                controlId="title-form"
+                validationState={title === '' ? 'error' : 'success'}
+              >
                 <ControlLabel>Title:</ControlLabel>
                 <FormControl
                   name="title"
@@ -96,9 +99,10 @@ class CreatePostModal extends Component {
                   value={title}
                   onChange={this.handleChange}
                 />
+                <FormControl.Feedback />
               </FormGroup>
 
-              <FormGroup controlId="body-form">
+              <FormGroup controlId="body-form" validationState={body === '' ? 'error' : 'success'}>
                 <ControlLabel>Body:</ControlLabel>
                 <FormControl
                   name="body"
@@ -108,10 +112,13 @@ class CreatePostModal extends Component {
                   value={body}
                   onChange={this.handleChange}
                 />
-                <HelpBlock>{error}</HelpBlock>
+                <FormControl.Feedback />
               </FormGroup>
 
-              <FormGroup controlId="author-form">
+              <FormGroup
+                controlId="author-form"
+                validationState={author === '' ? 'error' : 'success'}
+              >
                 <ControlLabel>Author:</ControlLabel>
                 <FormControl
                   name="author"
@@ -120,6 +127,7 @@ class CreatePostModal extends Component {
                   value={author}
                   onChange={this.handleChange}
                 />
+                <FormControl.Feedback />
               </FormGroup>
 
               <FormGroup controlId="formControlsSelect">
@@ -131,9 +139,14 @@ class CreatePostModal extends Component {
                 </FormControl>
               </FormGroup>
             </form>
+            <p>{error}</p>
           </Modal.Body>
           <Modal.Footer>
-            <Button bsStyle="primary" onClick={this.submitChanges}>
+            <Button
+              bsStyle="primary"
+              onClick={this.submitChanges}
+              disabled={title === '' || body === '' || author === ''}
+            >
               Submit
             </Button>
             <Button onClick={close}>Close</Button>

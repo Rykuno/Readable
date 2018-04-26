@@ -1,24 +1,34 @@
-# Readable
+# API Server
 
+To install and start the API server, run the following commands in this directory:
 
+* `npm install`
+* `node server`
 
-## Description
-This project was built for Udacity's Redux course where where this project's goal is to build a content and comment web app. Users can post content to predefined categories, comment on their posts and other users' posts, and vote on posts and comments. Users will also be able to edit and delete posts and comments.
+## Using The Server
 
-## Installation
-1) Clone the project and start the API server
-    - `cd api-server`
-    - `npm install`
-    - `node server`
-2) Start the React Application
-    - `cd readable`
-    - `npm install`
-    - `npm start`
+### Include An Authorization Header
 
-## Demo
-![demo](readable.gif)
+All requests should use an **Authorization header** to work with your own data:
 
-## API Endpoints
+```js
+fetch(
+    url,
+    {
+        headers: { 'Authorization': 'whatever-you-want' }
+    }
+)
+```
+
+You can use the [`BooksAPI.js`](https://github.com/udacity/reactnd-project-myreads-starter/blob/master/src/BooksAPI.js) file from the MyReads Project as a guide for designing your own API calls for this project.
+
+### Comment Counts
+Posts retrieved in a list or individually now contain comment counts in the format `post: { commentCount: 0 }`.  This should make it easier to display the number of comments a post has without having to call the comments endpoint for each post.   This count is updated whenever a comment is added or deleted via the `POST /comments` or `DELETE /comments/:id` endpoints.
+
+### API Endpoint
+
+The following endpoints are available:
+
 | Endpoints       | Usage          | Params         |
 |-----------------|----------------|----------------|
 | `GET /categories` | Get all of the categories available for the app. List is found in `categories.js`. Feel free to extend this list as you desire. |  |
@@ -35,4 +45,3 @@ This project was built for Udacity's Redux course where where this project's goa
 | `POST /comments/:id` | Used for voting on a comment. | **option** - [String]: Either `"upVote"` or `"downVote"`.  |
 | `PUT /comments/:id` | Edit the details of an existing comment. | **timestamp** - timestamp. Get this however you want. <br> **body** - [String] |
 | `DELETE /comments/:id` | Sets a comment's deleted flag to `true`. | &nbsp; |
-

@@ -8,8 +8,8 @@ import downvoteArrow from '../images/downvote-arrow.jpeg';
 import upvoteArrow from '../images/upvote-arrow.jpeg';
 import editIcon from '../images/edit.png';
 import deleteIcon from '../images/delete.png';
-import EditModal from '../components/EditModal';
-import DeleteModal from '../components/DeleteModal';
+import EditModal from '../containers/EditModal';
+import DeleteModal from '../containers/DeleteModal';
 
 class Post extends Component {
   state = {

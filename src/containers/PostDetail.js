@@ -4,15 +4,15 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import swal from 'sweetalert';
 import { votePost, deleteComment } from '../actions/infoActions';
-import NavBar from '../components/NavBar';
+import NavBar from './NavBar';
 import Header from '../components/Header';
 import Comment from '../components/Comment';
 import downvoteArrow from '../images/downvote-arrow.jpeg';
 import upvoteArrow from '../images/upvote-arrow.jpeg';
 import * as ReadableAPI from '../utils/readableAPI';
-import EditModal from '../components/EditModal';
+import EditModal from './EditModal';
 import editIcon from '../images/edit.png';
-import NoMatch from './NoMatch';
+import NoMatch from '../components/NoMatch';
 import DeleteModal from './DeleteModal';
 import deleteIcon from '../images/delete.png';
 
@@ -145,6 +145,11 @@ class PostDetail extends Component {
   submitComment = e => {
     e.preventDefault();
     const { authorField, bodyField, id } = this.state;
+    if (!authorField || !bodyField) {
+      swal('Validation Error', 'Please provide both an Author and Body.', 'warning');
+      return;
+    }
+
     ReadableAPI.postComment(bodyField, authorField, id).then(data => {
       this.setState(prevState => ({
         comments: [...prevState.comments, data],
@@ -244,14 +249,15 @@ class PostDetail extends Component {
               onClick={() => this.votePost('downVote')}
             />
           </div>
-          <div className="info-container">
+          <div className="info-container border">
             <div className="author-container">
-              <button className="title-button">{this.state.title}</button>
+              <button className="title-button no-padding">{this.state.title}</button>
               <h5>Author: {author}</h5>
             </div>
-          </div>
-          <div className="post-body">
-            <p className="body-text">{body}</p>
+            <hr className="no-padding" />
+            <div className="post-body">
+              <p className="body-text padding-bottom">{body}</p>
+            </div>
           </div>
           <div className="metadata-container">
             <Badge>{commentCount} comments</Badge>

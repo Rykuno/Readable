@@ -4,9 +4,9 @@ import { MenuItem, DropdownButton, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { updateCategories, updateSortParam, setCategory } from '../actions/infoActions';
 import Header from '../components/Header';
-import NavBar from '../components/NavBar';
+import NavBar from '../containers/NavBar';
 import PostList from './PostList';
-import CreatePostModal from '../components/CreatePostModal';
+import CreatePostModal from '../containers/CreatePostModal';
 
 class Home extends Component {
   state = {

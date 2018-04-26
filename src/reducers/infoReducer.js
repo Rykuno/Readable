@@ -90,7 +90,10 @@ const infoReducer = (state = initialState, action) => {
     case CREATE_POST:
       return {
         ...state,
-        posts: [...state.posts, action.payload]
+        posts:
+          state.sortBy === 'mostRecent'
+            ? [action.payload, ...state.posts]
+            : [...state.posts, action.payload]
       };
     case DELETE_COMMENT:
       return {

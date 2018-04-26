@@ -1,7 +1,7 @@
 import React from 'react';
 import { Jumbotron, Button } from 'react-bootstrap';
 import Header from './Header';
-import NavBar from './NavBar';
+import NavBar from '../containers/NavBar';
 
 const About = () => (
   <div>

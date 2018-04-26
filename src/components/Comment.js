@@ -6,7 +6,7 @@ import upvoteArrow from '../images/upvote-arrow.jpeg';
 import editIcon from '../images/edit.png';
 import deleteIcon from '../images/delete.png';
 import userArrow from '../images/userArrow.png';
-import EditCommentModal from '../components/EditCommentModal';
+import EditCommentModal from '../containers/EditCommentModal';
 
 class Comment extends Component {
   state = {
@@ -51,7 +51,7 @@ class Comment extends Component {
           />
           <h5>{voteScore}</h5>
           <input
-            className="vertical-vote comment-arrow"
+            className="vertical-vote comment-arrow padding-bottom"
             type="image"
             src={downvoteArrow}
             alt="downVote"

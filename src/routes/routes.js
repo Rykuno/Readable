@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Home from '../containers/Home';
-import PostDetail from '../components/PostDetail';
+import PostDetail from '../containers/PostDetail';
 import NoMatch from '../components/NoMatch';
 import About from '../components/About';
 

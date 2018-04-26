@@ -133,13 +133,11 @@ ul {
 .post-body {
   margin-top: 20px;
   text-align: left;
-  border: 1px solid gray;
-  border-radius: 8px;
 }
 
 .body-text {
   margin: 0px;
-  padding: 5px;
+  padding: 0px;
 }
 
 .comment-input {
@@ -239,4 +237,8 @@ textarea {
 
 input:focus {
   outline: none;
+}
+
+.padding-bottom {
+  padding-bottom: 10px;
 }
