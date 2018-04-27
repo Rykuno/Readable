@@ -6,7 +6,7 @@ import upvoteArrow from '../images/upvote-arrow.jpeg';
 import editIcon from '../images/edit.png';
 import deleteIcon from '../images/delete.png';
 import userArrow from '../images/userArrow.png';
-import EditCommentModal from '../containers/EditCommentModal';
+import EditCommentModal from './EditCommentModal';
 import { getTime } from '../utils/utilities';
 
 class Comment extends Component {
