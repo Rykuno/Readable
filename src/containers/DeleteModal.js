@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button, Modal } from 'react-bootstrap';
-import { deletePost } from '../actions/infoActions';
+import { deletePost } from '../actions/postActions';
 
 class DeleteModal extends Component {
   removePost = () => {

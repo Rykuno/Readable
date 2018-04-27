@@ -7,36 +7,29 @@ import editIcon from '../images/edit.png';
 import deleteIcon from '../images/delete.png';
 import userArrow from '../images/userArrow.png';
 import EditCommentModal from '../containers/EditCommentModal';
+import { getTime } from '../utils/utilities';
 
 class Comment extends Component {
   state = {
     showEdit: false
   };
 
-  getTime = () => {
-    const { timestamp } = this.props;
-    const date = new Date(timestamp);
-    const month = date.getMonth();
-    const day = date.getDate();
-    const year = date.getUTCFullYear();
-    return `${month}-${day}-${year}`;
-  };
-
-  showEditModal = () => {
+  toggleModal = () => {
     this.setState({
-      showEdit: true
-    });
-  };
-
-  closeEditModal = () => {
-    this.setState({
-      showEdit: false
+      showEdit: !this.state.showEdit
     });
   };
 
   render() {
     const {
-      deleteComment, id, body, author, vote, voteScore, updateComment
+      deleteComment,
+      id,
+      body,
+      author,
+      vote,
+      voteScore,
+      updateComment,
+      timestamp
     } = this.props;
 
     return (
@@ -77,14 +70,14 @@ class Comment extends Component {
             type="image"
             src={editIcon}
             alt="Edit"
-            onClick={this.showEditModal}
+            onClick={this.toggleModal}
           />
-          <Badge className="float-right">{this.getTime()}</Badge>
+          <Badge className="float-right">{getTime(timestamp)}</Badge>
         </div>
         {this.state.showEdit === false || (
           <EditCommentModal
             show
-            close={this.closeEditModal}
+            close={this.toggleModal}
             body={body}
             id={id}
             updateComment={(commentID, commentBody) => updateComment(commentID, commentBody)}

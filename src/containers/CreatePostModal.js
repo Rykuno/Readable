@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Modal, ControlLabel, FormControl, Button, FormGroup } from 'react-bootstrap';
-import { createPost } from '../actions/infoActions';
+import { createPost } from '../actions/postActions';
 
 class CreatePostModal extends Component {
   state = {
-    show: false,
     title: '',
     body: '',
     author: '',
@@ -14,54 +13,14 @@ class CreatePostModal extends Component {
     error: ''
   };
 
-  componentDidMount() {
-    const { show } = this.props;
-    if (show === true) {
-      this.handleShow();
-    } else {
-      this.handleClose();
-    }
-  }
-
-  handleClose = () => {
-    this.setState({ show: false });
-  };
-
-  handleShow = () => {
-    this.setState({
-      show: true
-    });
-  };
+  componentDidMount() {}
 
   handleChange = e => {
     e.preventDefault();
-    switch (e.target.name) {
-      case 'title':
-        this.setState({
-          title: e.target.value
-        });
-        break;
-      case 'body':
-        this.setState({
-          body: e.target.value
-        });
-        break;
-      case 'author':
-        this.setState({
-          author: e.target.value
-        });
-        break;
-      case 'category':
-        this.setState({
-          category: e.target.value
-        });
-        break;
-      default:
-        this.setState({
-          error: 'Error updating fields'
-        });
-        break;
-    }
+    const { name, value } = e.target;
+    this.setState({
+      [name]: value
+    });
   };
 
   submitChanges = () => {
@@ -69,19 +28,25 @@ class CreatePostModal extends Component {
       title, body, author, category
     } = this.state;
     const { createNewPost, close } = this.props;
-    createNewPost(title, body, author, category);
+    const post = {
+      title,
+      body,
+      author,
+      category
+    };
+    createNewPost(post);
     close();
   };
 
   render() {
-    const { close } = this.props;
+    const { close, show } = this.props;
     const {
       title, body, author, error
     } = this.state;
 
     return (
       <div>
-        <Modal show={this.state.show} onHide={close}>
+        <Modal show={show} onHide={close}>
           <Modal.Header closeButton>
             <Modal.Title>Create New Post</Modal.Title>
           </Modal.Header>
@@ -164,8 +129,7 @@ CreatePostModal.propTypes = {
 };
 
 const mapDispatchToProps = dispatch => ({
-  createNewPost: (title, body, author, category) =>
-    dispatch(createPost(title, body, author, category))
+  createNewPost: post => dispatch(createPost(post))
 });
 
 export default connect(null, mapDispatchToProps)(CreatePostModal);

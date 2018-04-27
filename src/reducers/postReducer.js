@@ -1,14 +1,16 @@
 import {
-  UPDATE_CATEGORIES,
   UPDATE_POSTS,
-  UPDATE_SORT_PARAM,
   VOTE_POST,
-  SET_CATEGORY,
   MODIFY_POST,
   DELETE_POST,
   CREATE_POST,
-  DELETE_COMMENT
-} from '../actions/infoActions';
+  UPDATE_SORT_PARAM
+} from '../actions/actionTypes';
+
+const initialState = {
+  posts: [],
+  sortBy: 'mostRecent'
+};
 
 const sortPostsBy = (sortBy, posts) => {
   switch (sortBy) {
@@ -21,20 +23,8 @@ const sortPostsBy = (sortBy, posts) => {
   }
 };
 
-const initialState = {
-  categories: [],
-  posts: [],
-  sortBy: 'mostRecent',
-  searchCategory: ''
-};
-
-const infoReducer = (state = initialState, action) => {
+const postReducer = (state = initialState, action) => {
   switch (action.type) {
-    case UPDATE_CATEGORIES:
-      return {
-        ...state,
-        categories: action.payload
-      };
     case UPDATE_POSTS:
       return {
         ...state,
@@ -48,24 +38,6 @@ const infoReducer = (state = initialState, action) => {
         ...state,
         sortBy: action.payload,
         posts: sortPostsBy(action.payload, state.posts)
-      };
-    case VOTE_POST:
-      return {
-        ...state,
-        posts: state.posts.slice().map(obj => {
-          if (obj.id === action.payload.id) {
-            const newObj = { ...obj };
-            newObj.voteScore =
-              action.payload.vote === 'upVote' ? obj.voteScore + 1 : obj.voteScore - 1;
-            return newObj;
-          }
-          return obj;
-        })
-      };
-    case SET_CATEGORY:
-      return {
-        ...state,
-        searchCategory: action.payload
       };
     case MODIFY_POST:
       return {
@@ -95,13 +67,23 @@ const infoReducer = (state = initialState, action) => {
             ? [action.payload, ...state.posts]
             : [...state.posts, action.payload]
       };
-    case DELETE_COMMENT:
+    case VOTE_POST:
       return {
-        ...state
+        ...state,
+        posts: state.posts.slice().map(obj => {
+          if (obj.id === action.payload.id) {
+            const newObj = { ...obj };
+            newObj.voteScore =
+              action.payload.vote === 'upVote' ? obj.voteScore + 1 : obj.voteScore - 1;
+            return newObj;
+          }
+          return obj;
+        })
       };
     default:
       return state;
   }
 };
 
-export default infoReducer;
+export default postReducer;
+

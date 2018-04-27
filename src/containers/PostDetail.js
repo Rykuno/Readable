@@ -3,7 +3,8 @@ import { Badge, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import swal from 'sweetalert';
-import { votePost, deleteComment } from '../actions/infoActions';
+import { votePost } from '../actions/postActions';
+import { deleteComment } from '../actions/commentActions';
 import NavBar from './NavBar';
 import Header from '../components/Header';
 import Comment from '../components/Comment';
@@ -15,6 +16,7 @@ import editIcon from '../images/edit.png';
 import NoMatch from '../components/NoMatch';
 import DeleteModal from './DeleteModal';
 import deleteIcon from '../images/delete.png';
+import { getTime } from '../utils/utilities';
 
 class PostDetail extends Component {
   state = {
@@ -29,15 +31,6 @@ class PostDetail extends Component {
     this.fetchPostData();
     this.fetchComments();
   }
-
-  getTime = () => {
-    const { timestamp } = this.state;
-    const date = new Date(timestamp);
-    const month = date.getMonth();
-    const day = date.getDate();
-    const year = date.getUTCFullYear();
-    return `${month}-${day}-${year}`;
-  };
 
   votePost = vote => {
     const { id } = this.state;
@@ -159,27 +152,15 @@ class PostDetail extends Component {
     });
   };
 
-  showEditModal = () => {
+  toggleEditModal = () => {
     this.setState({
-      showEdit: true
+      showEdit: !this.state.showEdit
     });
   };
 
-  closeEditModal = () => {
+  toggleDeleteModal = () => {
     this.setState({
-      showEdit: false
-    });
-  };
-
-  showDeleteModal = () => {
-    this.setState({
-      showDelete: true
-    });
-  };
-
-  closeDeleteModal = () => {
-    this.setState({
-      showDelete: false
+      showDelete: !this.state.showDelete
     });
   };
 
@@ -219,9 +200,10 @@ class PostDetail extends Component {
       author,
       category,
       voteScore,
-      commentCount,
       bodyField,
-      authorField
+      authorField,
+      comments,
+      timestamp
     } = this.state;
 
     if (!id) {
@@ -260,22 +242,22 @@ class PostDetail extends Component {
             </div>
           </div>
           <div className="metadata-container">
-            <Badge>{commentCount} comments</Badge>
-            <Badge>Posted {this.getTime()}</Badge>
+            <Badge>{comments.length} comments</Badge>
+            <Badge>Posted {getTime(timestamp)}</Badge>
             <Badge>{category}</Badge>
             <input
               className="post-icon"
               type="image"
               src={editIcon}
               alt="Edit"
-              onClick={this.showEditModal}
+              onClick={this.toggleEditModal}
             />
             <input
               className="post-icon"
               type="image"
               src={deleteIcon}
               alt="Delete"
-              onClick={this.showDeleteModal}
+              onClick={this.toggleDeleteModal}
             />
           </div>
           <hr />
@@ -307,7 +289,7 @@ class PostDetail extends Component {
         {this.state.showEdit === false || (
           <EditModal
             show
-            close={this.closeEditModal}
+            close={this.toggleEditModal}
             body={body}
             title={title}
             id={id}
@@ -315,7 +297,7 @@ class PostDetail extends Component {
           />
         )}
         {this.state.showDelete === false || (
-          <DeleteModal id={id} close={this.closeDeleteModal} returnToPage={this.returnToPage} />
+          <DeleteModal id={id} close={this.toggleDeleteModal} returnToPage={this.returnToPage} />
         )}
       </div>
     );
@@ -335,7 +317,7 @@ PostDetail.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  posts: state.info.posts
+  posts: state.posts.posts
 });
 
 const mapDispatchToProps = dispatch => ({

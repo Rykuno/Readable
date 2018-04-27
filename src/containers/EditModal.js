@@ -2,32 +2,21 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Modal, ControlLabel, FormControl, Button, FormGroup } from 'react-bootstrap';
-import { modifyPost } from '../actions/infoActions';
+import { modifyPost } from '../actions/postActions';
 
 class EditModal extends Component {
   state = {
-    show: false,
     title: '',
     body: ''
   };
 
   componentDidMount() {
-    const { show } = this.props;
-    if (show === true) {
-      this.handleShow();
-    } else {
-      this.handleClose();
-    }
+    this.mapPropsToState();
   }
 
-  handleClose = () => {
-    this.setState({ show: false });
-  };
-
-  handleShow = () => {
+  mapPropsToState = () => {
     const { title, body } = this.props;
     this.setState({
-      show: true,
       title,
       body
     });
@@ -35,20 +24,10 @@ class EditModal extends Component {
 
   handleChange = e => {
     e.preventDefault();
-    switch (e.target.name) {
-      case 'title':
-        this.setState({
-          title: e.target.value
-        });
-        break;
-      case 'body':
-        this.setState({
-          body: e.target.value
-        });
-        break;
-      default:
-        break;
-    }
+    const { name, value } = e.target;
+    this.setState({
+      [name]: value
+    });
   };
 
   submitChanges = () => {
@@ -56,7 +35,8 @@ class EditModal extends Component {
     const {
       id, editPost, close, echoChanges
     } = this.props;
-    editPost(id, title, body);
+    const post = { id, title, body };
+    editPost(post);
     if (echoChanges) {
       echoChanges(title, body);
     }
@@ -64,11 +44,11 @@ class EditModal extends Component {
   };
 
   render() {
-    const { close } = this.props;
+    const { close, show } = this.props;
     const { title, body } = this.state;
     return (
       <div>
-        <Modal show={this.state.show} onHide={close}>
+        <Modal show={show} onHide={close}>
           <Modal.Header closeButton>
             <Modal.Title>Edit Post</Modal.Title>
           </Modal.Header>
@@ -127,7 +107,7 @@ EditModal.propTypes = {
 };
 
 const mapDispatchToProps = dispatch => ({
-  editPost: (id, title, body) => dispatch(modifyPost(id, title, body))
+  editPost: post => dispatch(modifyPost(post))
 });
 
 export default connect(null, mapDispatchToProps)(EditModal);

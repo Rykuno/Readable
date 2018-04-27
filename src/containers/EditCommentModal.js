@@ -1,49 +1,31 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import swal from 'sweetalert';
 import PropTypes from 'prop-types';
 import { Modal, ControlLabel, FormControl, Button, FormGroup } from 'react-bootstrap';
 import * as ReadableAPI from '../utils/readableAPI';
-import { modifyComment } from '../actions/infoActions';
 
 class EditCommentModal extends Component {
   state = {
-    show: false,
-    body: '',
+    body: ''
   };
 
   componentDidMount() {
-    const { show } = this.props;
-    if (show === true) {
-      this.handleShow();
-    } else {
-      this.handleClose();
-    }
+    this.updatePropsToState();
   }
 
-  handleClose = () => {
-    this.setState({ show: false });
-  };
-
-  handleShow = () => {
+  updatePropsToState = () => {
     const { body } = this.props;
     this.setState({
-      show: true,
       body
     });
   };
 
   handleChange = e => {
     e.preventDefault();
-    switch (e.target.name) {
-      case 'body':
-        this.setState({
-          body: e.target.value
-        });
-        break;
-      default:
-        break;
-    }
+    const { name, value } = e.target;
+    this.setState({
+      [name]: value
+    });
   };
 
   submitChanges = () => {
@@ -60,11 +42,11 @@ class EditCommentModal extends Component {
   };
 
   render() {
-    const { close } = this.props;
+    const { close, show } = this.props;
     const { body } = this.state;
     return (
       <div>
-        <Modal show={this.state.show} onHide={close}>
+        <Modal show={show} onHide={close}>
           <Modal.Header closeButton>
             <Modal.Title>Edit Comment</Modal.Title>
           </Modal.Header>
@@ -104,8 +86,4 @@ EditCommentModal.propTypes = {
   updateComment: PropTypes.func.isRequired
 };
 
-const mapDispatchToProps = dispatch => ({
-  modifyComment: (id, title, body) => dispatch(modifyComment(id, body))
-});
-
-export default connect(null, mapDispatchToProps)(EditCommentModal);
+export default EditCommentModal;

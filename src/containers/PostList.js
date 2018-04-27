@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Post from './Post';
-import { updatePosts, votePost, updateSortParam, modifyPost } from '../actions/infoActions';
+import { updatePosts, updateSortParam } from '../actions/postActions';
 
 class PostList extends Component {
   componentDidMount() {
@@ -66,22 +66,18 @@ PostList.propTypes = {
   posts: PropTypes.arrayOf(PropTypes.object).isRequired,
   searchCategory: PropTypes.string.isRequired,
   sortPostsBy: PropTypes.func.isRequired,
-  addPosts: PropTypes.func.isRequired,
-  editPost: PropTypes.func.isRequired,
-  voteForPost: PropTypes.func.isRequired
+  addPosts: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  posts: state.info.posts,
-  sortBy: state.info.sortBy,
-  searchCategory: state.info.searchCategory
+  posts: state.posts.posts,
+  sortBy: state.posts.sortBy,
+  searchCategory: state.categories.searchCategory
 });
 
 const mapDispatchToProps = dispatch => ({
   addPosts: posts => dispatch(updatePosts(posts)),
-  voteForPost: (id, vote) => dispatch(votePost(id, vote)),
-  sortPostsBy: sortBy => dispatch(updateSortParam(sortBy)),
-  editPost: (postID, postTitle, postBody) => modifyPost(postID, postTitle, postBody)
+  sortPostsBy: sortBy => dispatch(updateSortParam(sortBy))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostList);

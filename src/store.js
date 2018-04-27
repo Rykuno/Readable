@@ -1,10 +1,16 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
-import infoReducer from './reducers/infoReducer';
+import categoryReducer from './reducers/categoryReducer';
+import postReducer from './reducers/postReducer';
+import commentReducer from './reducers/commentReducer';
 
 const store = createStore(
-  combineReducers({ info: infoReducer }),
+  combineReducers({
+    posts: postReducer,
+    comments: commentReducer,
+    categories: categoryReducer
+  }),
   {},
   applyMiddleware(logger, thunk)
 );

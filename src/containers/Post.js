@@ -3,27 +3,19 @@ import { Badge } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { votePost, modifyPost } from '../actions/infoActions';
+import { votePost, modifyPost } from '../actions/postActions';
 import downvoteArrow from '../images/downvote-arrow.jpeg';
 import upvoteArrow from '../images/upvote-arrow.jpeg';
 import editIcon from '../images/edit.png';
 import deleteIcon from '../images/delete.png';
 import EditModal from '../containers/EditModal';
 import DeleteModal from '../containers/DeleteModal';
+import { getTime } from '../utils/utilities';
 
 class Post extends Component {
   state = {
     showEdit: false,
     showDelete: false
-  };
-
-  getTime = () => {
-    const { timestamp } = this.props;
-    const date = new Date(timestamp);
-    const month = date.getMonth();
-    const day = date.getDate();
-    const year = date.getUTCFullYear();
-    return `${month}-${day}-${year}`;
   };
 
   votePost = vote => {
@@ -32,33 +24,29 @@ class Post extends Component {
     voteForPost(id, vote);
   };
 
-  showEditModal = () => {
+  toggleEditModal = () => {
     this.setState({
-      showEdit: true
+      showEdit: !this.state.showEdit
     });
   };
 
-  closeEditModal = () => {
+  toggleDeleteModal = () => {
     this.setState({
-      showEdit: false
-    });
-  };
-
-  showDeleteModal = () => {
-    this.setState({
-      showDelete: true
-    });
-  };
-
-  closeDeleteModal = () => {
-    this.setState({
-      showDelete: false
+      showDelete: !this.state.showDelete
     });
   };
 
   render() {
     const {
-      id, title, author, voteScore, category, commentCount, body, editPost
+      id,
+      title,
+      body,
+      author,
+      voteScore,
+      category,
+      commentCount,
+      editPost,
+      timestamp
     } = this.props;
 
     return (
@@ -82,7 +70,9 @@ class Post extends Component {
         </div>
         <div className="info-container">
           <div className="author-container">
-            <Link to={`/r/${category}/${id}`} className="large-text">{title}</Link>
+            <Link to={`/r/${category}/${id}`} className="large-text">
+              {title}
+            </Link>
             <h5>Author: {author}</h5>
           </div>
           <div className="metadata-container">
@@ -91,26 +81,26 @@ class Post extends Component {
             <button className="comment-button">Category</button>
             <Badge className="modesty-spacing">{category}</Badge>
             <button className="comment-button">Submitted</button>
-            <Badge className="modesty-spacing">{this.getTime()}</Badge>
+            <Badge className="modesty-spacing">{getTime(timestamp)}</Badge>
             <input
               className="post-icon"
               type="image"
               src={editIcon}
               alt="Edit"
-              onClick={this.showEditModal}
+              onClick={this.toggleEditModal}
             />
             <input
               className="post-icon"
               type="image"
               src={deleteIcon}
               alt="Delete"
-              onClick={this.showDeleteModal}
+              onClick={this.toggleDeleteModal}
             />
 
             {this.state.showEdit === false || (
               <EditModal
                 show
-                close={this.closeEditModal}
+                close={this.toggleEditModal}
                 body={body}
                 title={title}
                 id={id}
@@ -118,7 +108,7 @@ class Post extends Component {
               />
             )}
             {this.state.showDelete === false || (
-              <DeleteModal id={id} close={this.closeDeleteModal} />
+              <DeleteModal id={id} close={this.toggleDeleteModal} />
             )}
           </div>
         </div>

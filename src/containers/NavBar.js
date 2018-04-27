@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Navbar, MenuItem, Nav, NavItem, NavDropdown } from 'react-bootstrap';
-import { setCategory } from '../actions/infoActions';
+import { setCategory } from '../actions/categoryActions';
 
 class NavBar extends Component {
   populateCategories = () => {
-    const { categories } = this.props;    
+    const { categories } = this.props;
     const categoryList = categories.map(obj => (
       <MenuItem href={`/r/${obj.name}`} key={obj.path}>
         {obj.name}
@@ -46,7 +46,7 @@ NavBar.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  categories: state.info.categories
+  categories: state.categories.categories
 });
 
 const mapDispatchToProps = dispatch => ({

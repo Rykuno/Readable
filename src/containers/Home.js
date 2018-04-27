@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { MenuItem, DropdownButton, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import { updateCategories, updateSortParam, setCategory } from '../actions/infoActions';
+import { updateCategories, setCategory } from '../actions/categoryActions';
+import { updateSortParam } from '../actions/postActions';
 import Header from '../components/Header';
 import NavBar from '../containers/NavBar';
 import PostList from './PostList';
@@ -10,7 +11,7 @@ import CreatePostModal from '../containers/CreatePostModal';
 
 class Home extends Component {
   state = {
-    showCreate: false
+    show: false
   };
 
   componentDidMount() {
@@ -27,17 +28,12 @@ class Home extends Component {
     sortPostsBy(e);
   };
 
-  closeCreateModal = () => {
-    this.setState({
-      showCreate: false
-    });
-  };
 
-  showCreateModal = () => {
+  toggleCreateModal = () => {
     this.setState({
-      showCreate: true
+      show: !this.state.show
     });
-  };
+  }
 
   fetchCategories = () => {
     const { addCategories } = this.props;
@@ -46,6 +42,7 @@ class Home extends Component {
 
   render() {
     const { sortBy } = this.props;
+    const { show } = this.state;
     return (
       <div className="App">
         <Header />
@@ -65,14 +62,14 @@ class Home extends Component {
               Votes
             </MenuItem>
           </DropdownButton>
-          <Button bsStyle="primary" onClick={this.showCreateModal}>
+          <Button bsStyle="primary" onClick={this.toggleCreateModal}>
             Create Post
           </Button>
           <hr />
           <PostList />
         </div>
 
-        {this.state.showCreate === false || <CreatePostModal show close={this.closeCreateModal} />}
+        {show === false || <CreatePostModal show close={this.toggleCreateModal} />}
       </div>
     );
   }
@@ -91,8 +88,8 @@ Home.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  info: state.info,
-  sortBy: state.info.sortBy
+  posts: state.posts,
+  sortBy: state.posts.sortBy
 });
 
 const mapDispatchToProps = dispatch => ({
